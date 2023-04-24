@@ -1,0 +1,60 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+
+// Определение структуры дерева
+typedef struct Tree {
+    int value; // Значение узла
+    Tree* right; // Правый потомок
+    Tree* left; // Левый потомок
+};
+
+// Обход дерева в прямом порядке и вывод узлов
+void preOrderTraversal(Tree* tree) {
+    if (tree != NULL) {
+        printf("%d ", tree->value);
+        preOrderTraversal(tree->left);
+        preOrderTraversal(tree->right);
+    }
+}
+
+// Обход дерева в обратном порядке и вывод узлов
+void postOrderTraversal(Tree* tree) {
+    if (tree != NULL) {
+        postOrderTraversal(tree->left);
+        postOrderTraversal(tree->right);
+        printf("%d ", tree->value);
+    }
+}
+
+// Добавление узла с заданным значением в дерево
+Tree* addNode(Tree* tree, int newValue) {
+    if (tree == NULL) {
+        tree = (Tree*)malloc(sizeof(Tree));
+        tree->value = newValue;
+        tree->left = NULL;
+        tree->right = NULL;
+    }
+    else if (newValue < tree->value && newValue != tree->value)
+        tree->left = addNode(tree->left, newValue);
+    else if (newValue > tree->value && newValue != tree->value)
+        tree->right = addNode(tree->right, newValue);
+    return(tree);
+}
+
+int main() {
+    freopen("input.txt", "r", stdin);
+    int nodeValue;
+    Tree* tree = NULL;
+
+    // Чтение значений из файла input.txt и добавление их в дерево
+    while (scanf("%d", &nodeValue) != EOF)
+        tree = addNode(tree, nodeValue);
+
+    // Вывод узлов дерева в прямом и обратном порядке
+    preOrderTraversal(tree);
+    printf("\n");
+    postOrderTraversal(tree);
+
+    return 0;
+}
